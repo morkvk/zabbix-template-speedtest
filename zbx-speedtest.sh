@@ -162,9 +162,13 @@ case "$ACTION" in
     get_data_timestamp
     ;;
   run)
-    if speedtest --accept-license --accept-gdpr -f json > "${DATA_FILE}.new"
-    then
-      mv "${DATA_FILE}.new" "$DATA_FILE"
+    if [ -f "$DATA_FILE" ]; then
+        rm "$DATA_FILE"  # Удаляем существующий файл, если он есть
+    fi
+    if speedtest --server-id 36998 --accept-license --accept-gdpr -f json > "$DATA_FILE" 2> /tmp/error.log; then
+        echo "Speedtest completed successfully."
+    else
+        echo "Speedtest failed. Check error.log for details."
     fi
     ;;
   *)
