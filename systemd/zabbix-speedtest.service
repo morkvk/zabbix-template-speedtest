@@ -4,6 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=zabbix-speedtest
 User=zabbix
 ExecStart=/etc/zabbix/bin/zbx-speedtest.sh --run
 
