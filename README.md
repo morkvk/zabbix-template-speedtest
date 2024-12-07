@@ -1,87 +1,55 @@
-# Zabbix Speedtest template
+##################################### SPEEDTEST #################################################
+# Установить необходимые пакеты
+apt-get install -y curl jq bc
 
-## Dependencies
+curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash
 
-- [bc](https://www.gnu.org/software/bc/manual/html_mono/bc.html)
-- [jq](https://stedolan.github.io/jq/)
-- [speedtest-cli](https://www.speedtest.net/apps/cli)
+apt-get install -y speedtest
+# Создать директорию и клонировать репозиторий
+mkdir -p /etc/zabbix/bin
 
-## ⚠️ Warning
+rm -rf zabbix-template-speedtest  # Удалить, если существует
 
-You need to install [Ookla's version of speedtest-cli](https://www.speedtest.net/apps/cli) and *NOT* the unofficial python tool.
+git clone https://github.com/pschmitt/zabbix-template-speedtest.git
 
-## Installation (Generic x86_64)
+cd zabbix-template-speedtest
 
-- Install [speedtest-cli](https://www.speedtest.net/apps/cli)
-- Create `/etc/zabbix/bin`: `mkdir -p /etc/zabbix/bin`
-- Copy `zbx-speedtest.sh` to `/etc/zabbix/bin`
-- Make it executable: `chmod +x /etc/zabbix/bin/zbx-speedtest.sh`
-- Install the systemd service and timer: `cp systemd/{zabbix-speedtest.service,zabbix-speedtest.timer} /etc/systemd/system`
-- Start and enable the timer: `systemctl enable --now zabbix-speedtest.timer`
-- Import the zabbix-agent config: `cp zabbix_agentd.d/speedtest.conf /etc/zabbix/zabbix_agentd.conf.d`
-- Restart zabbix-agent: `systemctl restart zabbix-agent`
-- Import `template_speedtest.xml` on your Zabbix server
 
-## Installation (Debian/Ubuntu)
+# Копировать и настроить скрипт
+cp zbx-speedtest-debian.sh /etc/zabbix/bin/zbx-speedtest.sh
 
-- Install [speedtest-cli](https://www.speedtest.net/apps/cli)
-- Create `/etc/zabbix/bin`: `mkdir -p /etc/zabbix/bin`
-- Copy `zbx-speedtest-debian.sh` to `/etc/zabbix/bin/zbx-speedtest.sh`
-- Make it executable: `chmod +x /etc/zabbix/bin/zbx-speedtest.sh`
-- Install the systemd service and timer: `cp systemd/{zabbix-speedtest-debian.service,zabbix-speedtest.timer} /etc/systemd/system; mv /etc/systemd/system/zabbix-speedtest{-debian,}.service`
-- Start and enable the timer: `systemctl enable --now zabbix-speedtest.timer`
-- Import the zabbix-agent config: `cp zabbix_agentd.d/speedtest.conf /etc/zabbix/zabbix_agentd.conf.d`
-- Restart zabbix-agent: `systemctl restart zabbix-agent`
-- Import `template_speedtest.xml` on your Zabbix server
+chmod +x /etc/zabbix/bin/zbx-speedtest.sh
 
-## Installation (OpenWRT)
+# Копировать файлы systemd
 
-- Install [speedtest-cli](https://www.speedtest.net/apps/cli) by placing the binary in your `$PATH`
-- Copy `zbx-speedtest.sh` to `/etc/zabbix_agentd.conf.d/bin`
-- Make it executable: `chmod +x /etc/zabbix_agentd.conf.d/bin/zbx-speedtest.sh`
-- Import the zabbix-agent config: `cp zabbix_agentd.d/speedtest.openwrt.conf /etc/zabbix_agentd.conf.d`
-- Restart zabbix-agent: `/etc/init.d/zabbix-agentd restart`
-- Install the cron job: `crontab -e` -> Add the content of `systemd/speedtest.crontab`
-- Import `template_speedtest.xml` on your Zabbix server
+cp systemd/zabbix-speedtest-debian.service /etc/systemd/system/zabbix-speedtest.service
 
-## Installation (Docker)
+cp systemd/zabbix-speedtest.timer /etc/systemd/system/
 
-###  Speedtest in a container
+systemctl restart zabbix-agent2
 
-Check out pschmitt/speedtest:cron on [Docker Hub](https://hub.docker.com/repository/docker/pschmitt/speedtest/general)
+systemctl enable --now zabbix-speedtest.timer
 
-### Zabbix-agent 
+# Настроить конфигурацию Zabbix
 
-- You must mount `zbx-speedtest.sh` inside your zabbix-agent container
-- It also needs to have access to speedtest data volume
+cp zabbix_agentd.d/speedtest.conf /etc/zabbix/zabbix_agent2.d/plugins.d/
 
-Below is an example `docker-compose.yaml`.
+# Запланировать выполнение задачи через cron
 
-**NOTE:** pschmitt/zabbix-agent2 contains jq which is required by `zbx-speedtest.sh`.
+CRON_JOB="*/30 * * * * /etc/zabbix/bin/zbx-speedtest.sh"
 
-```yaml
----
-version: "3.7"
-services:
-  speedtest:
-    image: pschmitt/speedtest:cron
-    volumes:
-      - "./data/speedtest:/data"
-    environment:
-      - INTERVAL=300
+bash -c "(crontab -l; echo \"$CRON_JOB\") | crontab -"
 
-  zabbix-agent:
-    image: pschmitt/zabbix-agent2:latest
-    restart: unless-stopped
-    hostname: ${HOSTNAME}
-    privileged: true
-    network_mode: host
-    pid: host
-    volumes:
-      - "./config/bin:/zabbix/bin:ro"
-      - "./config/zabbix_agentd.d:/etc/zabbix/zabbix_agentd.d:ro"
+# Обновить скрипт с использованием sed
+
+FILE="/etc/zabbix/bin/zbx-speedtest.sh"
+
+sed -i.bak 's/\(if speedtest\)/\1 --server-id 36998/' "$FILE"
+
+echo "Успешно обновлено: добавлен --server-id 36998"
+
+echo "Сейчас он будет делать замер скорости нужно подождать секунд 40"
       - "./data/speedtest:/data/speedtest:ro"
     environment:
       - ZBX_HOSTNAMEITEM=system.hostname
       - ZBX_SERVER_HOST=zabbix.example.com
-```
