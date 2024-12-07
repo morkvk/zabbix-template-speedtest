@@ -20,13 +20,16 @@
 `apt-get install -y speedtest`
 
 
+
 Создадим папку куда положим скрипт.
 
 `mkdir -p /etc/zabbix/bin`
 
+
 клонируем репозиторий
 
 `git clone https://github.com/morkvk/zabbix-template-speedtest`
+
 
 переходим в репозиторий
 
@@ -36,6 +39,7 @@
 копируем sh скрипт в папку
 
 `cp zbx-speedtest.sh /etc/zabbix/bin/`
+
 
 выдаем права скрипту
 
@@ -49,13 +53,10 @@
 
 `cp systemd/zabbix-speedtest.timer /etc/systemd/system/`
 
+
 добавляем в systemd
 
 `systemctl enable zabbix-speedtest.timer`
-
-
-
-
 # Обновить скрипт с использованием sed
 
 `FILE="/etc/zabbix/bin/zbx-speedtest.sh"`
