@@ -30,8 +30,7 @@ COPY systemd/zabbix-speedtest.service /etc/systemd/system/zabbix-speedtest.servi
 COPY systemd/zabbix-speedtest.timer /etc/systemd/system/zabbix-speedtest.timer
 
 # Включить и активировать службу и таймер
-RUN systemctl enable zabbix-speedtest.service && \
-    systemctl enable zabbix-speedtest.timer
+RUN systemctl enable zabbix-speedtest.service
 
 # Настроить запуск systemd
 CMD ["/lib/systemd/systemd"]
