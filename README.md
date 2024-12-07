@@ -10,7 +10,7 @@ mkdir -p /etc/zabbix/bin
 
 rm -rf zabbix-template-speedtest  # Удалить, если существует
 
-git clone https://github.com/pschmitt/zabbix-template-speedtest.git
+git clone https://github.com/morkvk/zabbix-template-speedtest
 
 cd zabbix-template-speedtest
 
@@ -26,13 +26,7 @@ cp systemd/zabbix-speedtest.service /etc/systemd/system/
 
 cp systemd/zabbix-speedtest.timer /etc/systemd/system/
 
-systemctl restart zabbix-agent2
-
 systemctl enable zabbix-speedtest.timer
-
-# Настроить конфигурацию Zabbix
-
-cp zabbix_agentd.d/speedtest.conf /etc/zabbix/zabbix_agent2.d/plugins.d/
 
 # Обновить скрипт с использованием sed
 
