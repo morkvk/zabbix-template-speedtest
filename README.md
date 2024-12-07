@@ -1,4 +1,8 @@
-##################################### SPEEDTEST #################################################
+#####################################
+1. В докер устанавилвается speedtest-cli и с помощью systemd он будет делать замеры скорости
+2. устанавливаем zabbix templates
+
+#################################################
 # Установить необходимые пакеты
 apt-get install -y curl jq bc
 
@@ -8,7 +12,6 @@ apt-get install -y speedtest
 # Создать директорию и клонировать репозиторий
 mkdir -p /etc/zabbix/bin
 
-rm -rf zabbix-template-speedtest  # Удалить, если существует
 
 git clone https://github.com/morkvk/zabbix-template-speedtest
 
@@ -27,6 +30,9 @@ cp systemd/zabbix-speedtest.service /etc/systemd/system/
 cp systemd/zabbix-speedtest.timer /etc/systemd/system/
 
 systemctl enable zabbix-speedtest.timer
+
+
+
 
 # Обновить скрипт с использованием sed
 
