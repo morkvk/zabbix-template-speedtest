@@ -2,6 +2,7 @@ services:
   zabbix-speedtest:
     build: .
     restart: always
-    privileged: true
+    container_name: morkovka-zabbix-speedtest  # Установите уникальное имя контейнера
+    privileged: true  # Добавлено, если необходимо использовать привилегированный режим
     volumes:
-      - /tmp:/tmp
+      - /tmp:/tmp  # Прокидывем папку /tmp, если это необходимо
