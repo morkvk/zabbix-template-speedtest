@@ -7,7 +7,7 @@ Type=simple
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=zabbix-speedtest
-User=zabbix
+User=root
 ExecStart=/etc/zabbix/bin/zbx-speedtest.sh --run
 
 [Install]
