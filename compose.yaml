@@ -1,0 +1,7 @@
+services:
+  zabbix-speedtest:
+    build: .
+    restart: always
+    privileged: true
+    volumes:
+      - /tmp:/tmp
