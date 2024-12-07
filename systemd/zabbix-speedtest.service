@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-User=zabbix-agent
+User=zabbix
 ExecStart=/etc/zabbix/bin/zbx-speedtest.sh --run
 
 [Install]
