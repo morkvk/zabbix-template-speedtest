@@ -16,40 +16,26 @@ cd zabbix-template-speedtest
 
 
 # Копировать и настроить скрипт
-cp zbx-speedtest-debian.sh /etc/zabbix/bin/zbx-speedtest.sh
+cp zbx-speedtest.sh /etc/zabbix/bin/
 
 chmod +x /etc/zabbix/bin/zbx-speedtest.sh
 
 # Копировать файлы systemd
 
-cp systemd/zabbix-speedtest-debian.service /etc/systemd/system/zabbix-speedtest.service
+cp systemd/zabbix-speedtest.service /etc/systemd/system/
 
 cp systemd/zabbix-speedtest.timer /etc/systemd/system/
 
 systemctl restart zabbix-agent2
 
-systemctl enable --now zabbix-speedtest.timer
+systemctl enable zabbix-speedtest.timer
 
 # Настроить конфигурацию Zabbix
 
 cp zabbix_agentd.d/speedtest.conf /etc/zabbix/zabbix_agent2.d/plugins.d/
-
-# Запланировать выполнение задачи через cron
-
-CRON_JOB="*/30 * * * * /etc/zabbix/bin/zbx-speedtest.sh"
-
-bash -c "(crontab -l; echo \"$CRON_JOB\") | crontab -"
 
 # Обновить скрипт с использованием sed
 
 FILE="/etc/zabbix/bin/zbx-speedtest.sh"
 
 sed -i.bak 's/\(if speedtest\)/\1 --server-id 36998/' "$FILE"
-
-echo "Успешно обновлено: добавлен --server-id 36998"
-
-echo "Сейчас он будет делать замер скорости нужно подождать секунд 40"
-      - "./data/speedtest:/data/speedtest:ro"
-    environment:
-      - ZBX_HOSTNAMEITEM=system.hostname
-      - ZBX_SERVER_HOST=zabbix.example.com
