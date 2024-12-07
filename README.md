@@ -36,16 +36,16 @@
 `cd zabbix-template-speedtest`
 
 
-копируем sh скрипт в папку
+копируем sh скрипты в папку
 
 `cp zbx-speedtest.sh /etc/zabbix/bin/`
+`cp zabbix-wrapper.sh /etc/zabbix/bin/`
 
-
-выдаем права скрипту
+выдаем права скриптам
 
 `chmod +x /etc/zabbix/bin/zbx-speedtest.sh`
 
-
+`chmod +x /etc/zabbix/bin/zabbix-wrapper.sh`
 
 Копируем файлы systemd
 
