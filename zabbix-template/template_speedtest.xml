@@ -11,7 +11,7 @@
         <template>
             <template>Speedtest</template>
             <name>Speedtest</name>
-            <description>Check the ping status, up and download</description>
+            <description>Check the ping status, up and download Speedtest</description>
             <groups>
                 <group>
                     <name>Templates</name>
@@ -34,7 +34,7 @@
                             <name>Speedtest</name>
                         </application>
                     </applications>
-                    <request_method>POST</request_method>
+                    <type>ZABBIX_ACTIVE</type>
                 </item>
                 <item>
                     <name>Speedtest - Jitter</name>
@@ -47,6 +47,7 @@
                             <name>Speedtest</name>
                         </application>
                     </applications>
+					<type>ZABBIX_ACTIVE</type>
                 </item>
                 <item>
                     <name>Speedtest - PING</name>
@@ -59,7 +60,7 @@
                             <name>Speedtest</name>
                         </application>
                     </applications>
-                    <request_method>POST</request_method>
+                    <type>ZABBIX_ACTIVE</type>
                 </item>
                 <item>
                     <name>Speedtest - Server</name>
@@ -72,6 +73,7 @@
                             <name>Speedtest</name>
                         </application>
                     </applications>
+					<type>ZABBIX_ACTIVE</type>
                 </item>
                 <item>
                     <name>Speedtest - Timestamp</name>
@@ -82,6 +84,7 @@
                             <name>Speedtest</name>
                         </application>
                     </applications>
+					<type>ZABBIX_ACTIVE</type>
                 </item>
                 <item>
                     <name>Speedtest - Upload</name>
@@ -94,7 +97,7 @@
                             <name>Speedtest</name>
                         </application>
                     </applications>
-                    <request_method>POST</request_method>
+                    <type>ZABBIX_ACTIVE</type>
                 </item>
             </items>
         </template>
