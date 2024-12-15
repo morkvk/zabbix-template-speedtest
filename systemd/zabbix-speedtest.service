@@ -8,7 +8,7 @@ StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=zabbix-speedtest
 User=root
-ExecStart=/etc/zabbix/bin/zbx-speedtest.sh --run
+ExecStart=zbx-speedtest.sh --run
 
 [Install]
 WantedBy=multi-user.target
