@@ -1,3 +1,12 @@
+
+docker run -d --privileged \
+  --name morkovka-zabbix-speedtest \
+  --restart always \
+  -v /tmp:/tmp \
+  morkovka347/morkovka-zabbix-speedtest:test1
+  
+
+
 # Установка через docker + zabbix отдельно
 1. В докер устанавилвается speedtest-cli и с помощью systemd он будет делать замеры скорости скриптом zbx-speedtest.sh
 
