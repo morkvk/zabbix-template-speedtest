@@ -1,5 +1,5 @@
 [Unit]
-Description=Run a speedtest every 5 minutes
+Description=Run a speedtest every 30 minutes
 
 [Timer]
 OnCalendar=*:0/30
