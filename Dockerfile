@@ -15,15 +15,19 @@ RUN apt-get update && \
     locale-gen en_US.UTF-8 && \
     apt-get clean
 
+# Создать директорию copy
+RUN mkdir /copy
+
 # Установить speedtest
 RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash && \
     apt-get install -y speedtest && \
     apt-get clean
 
-# Клонирование репозитория и копирование скрипта
+# Перейти в директорию /copy, клонировать репозиторий и скопировать скрипт
+WORKDIR /copy
 RUN git clone https://github.com/morkvk/zabbix-template-speedtest && \
-    cp zabbix-template-speedtest/zbx-speedtest.sh /zbx-speedtest.sh && \
-    chmod +x /zbx-speedtest.sh
+    cp zabbix-template-speedtest/zbx-speedtest.sh /copy/zbx-speedtest.sh && \
+    chmod +x /copy/zbx-speedtest.sh
 
 # Копировать файлы systemd
 COPY systemd/zabbix-speedtest.service /etc/systemd/system/zabbix-speedtest.service
